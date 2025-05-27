@@ -5,8 +5,16 @@
   flex-direction: column;
   position: relative;
   overflow: hidden;
+  color: white;
 }
-
+.heading {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 180%;
+}
+.p {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 120%;
+}
 .content {
   width: auto;
   padding-right: 2%;

@@ -26,4 +26,6 @@ export const stack = [
   { name: "redux" },
   { name: "redux toolkit" },
   { name: "nginx" },
+  { name: "javascript" },
+  { name: "typescript" },
 ];

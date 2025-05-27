@@ -6,10 +6,10 @@ function App() {
     <div className={styles.container}>
       <Header />
       <div className={styles.content}>
-        <h1>Тестовое задание вк</h1>
-        <p>
+        <h1 className={styles.heading}>Тестовое задание вк</h1>
+        <p className={styles.p}>
           <span>Используемый стек: </span>
-          react, type script,shad cn, redux toolkit, axios
+          react, type script,shad cn, redux toolkit, axios, zod
         </p>
         <img className={styles.image} src="./logo.jpg" alt="" />
         <img

@@ -1,0 +1,19 @@
+import { MatchesProps } from "../../../types/matchesProps";
+export const data: MatchesProps[] = [
+  {
+    id: "728ed52f",
+    date: "24.04.2004",
+    description: "pending",
+    result: "m@example.com",
+    commands: ["газмяс", "ростов"],
+    attendance: 45,
+  },
+  {
+    id: "489e1d42",
+    date: "24.04.2004",
+    description: "pending",
+    result: "m@example.com",
+    commands: ["газмяс", "ростов"],
+    attendance: 45,
+  },
+];

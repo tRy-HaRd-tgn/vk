@@ -54,7 +54,9 @@ export const Footer = () => {
           <h2 className={styles.h2}>Мой стек</h2>
           <div className={styles.stackWrapper}>
             {stack?.map((item, index) => (
-              <div className={styles.item}>{item.name}</div>
+              <div key={index} className={styles.item}>
+                {item.name}
+              </div>
             ))}
           </div>
         </div>
