@@ -1,0 +1,31 @@
+.header {
+  position: relative;
+  background-color: black;
+  width: 100%;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.a {
+  color: white;
+  text-decoration: none;
+  font-size: 150%;
+}
+.a:hover {
+  text-decoration: underline;
+}
+.logo {
+  position: absolute;
+  top: 25px;
+  right: 0;
+  margin-right: 2%;
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  border: 1px solid white;
+  cursor: pointer;
+}
+.logo:hover {
+  border: 1px solid rgb(182, 182, 236) !important;
+}

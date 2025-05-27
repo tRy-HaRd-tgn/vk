@@ -1,0 +1,48 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.content {
+  width: auto;
+  padding-right: 2%;
+  padding-left: 2%;
+  height: 100%;
+
+  background-color: black;
+  position: relative;
+  margin-bottom: auto;
+}
+.image {
+  top: 60%;
+  position: absolute;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  animation: slideLeft 6s linear infinite;
+}
+@keyframes slideLeft {
+  0% {
+    left: 100%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    left: 45%;
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: -200px;
+    opacity: 0;
+  }
+}
