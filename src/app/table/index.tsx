@@ -6,7 +6,8 @@ function Result() {
   return (
     <div className={styles.container}>
       <div className={styles.tableContent}>
-        <DataTable columns={columns} data={data}></DataTable>
+        <h1 className={styles.heading}>Таблица данных (футбольных матчей)</h1>
+        <DataTable columns={columns} data={data} />
       </div>
     </div>
   );

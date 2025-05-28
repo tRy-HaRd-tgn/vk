@@ -1,7 +1,7 @@
 import { MatchesProps } from "../../types/matchesProps";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -26,13 +26,29 @@ export const columns: ColumnDef<MatchesProps>[] = [
   },
   {
     accessorKey: "attendance",
-    header: "Attendance",
+    header: ({ column }) => (
+      <div className="text-center">
+        <Button
+          style={{ cursor: "pointer" }}
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Attendance
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      </div>
+    ),
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("attendance"));
+      const formatted = new Intl.NumberFormat("en-US", {}).format(amount);
+      return <div className="text-center font-medium">{formatted}%</div>;
+    },
   },
   {
     id: "actions",
     cell: ({ row }) => {
       console.log(row.original);
-      const payment = row.original;
+      const info = row.original;
 
       return (
         <DropdownMenu>
@@ -45,9 +61,9 @@ export const columns: ColumnDef<MatchesProps>[] = [
           <DropdownMenuContent style={{ width: "500px" }} align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(info.id)}
             >
-              Copy payment ID
+              Copy match ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
