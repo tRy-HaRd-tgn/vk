@@ -27,12 +27,11 @@ export const columns: ColumnDef<MatchesProps>[] = [
   {
     accessorKey: "attendance",
     header: ({ column }) => (
-      <div className="text-center">
-        <Button
-          style={{ cursor: "pointer" }}
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+      <div
+        className="text-center"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        <Button style={{ cursor: "pointer" }} variant="ghost">
           Attendance
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
