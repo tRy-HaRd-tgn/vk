@@ -34,19 +34,31 @@ const FormButton = forwardRef<
 FormButton.displayName = "FormButton";
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
+  date: z.string().length(11),
+  description: z.string().min(5).max(300),
+  result: z.string().min(5).max(30),
+  commands: z.string().min(5).max(30),
+  attendance: z.number().min(0).max(100),
 });
 export const CustomForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      date: "",
+      description: "",
+      result: "",
+      commands: "",
     },
   });
 
   const { isSubmitting, errors } = form.formState;
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    //var uniq = 'id' + (new Date()).getTime(); - формирование id
+    try {
+    } catch (e) {
+    } finally {
+    }
     console.log(values);
   }
   return (
@@ -54,15 +66,73 @@ export const CustomForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name="date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>date</FormLabel>
               <FormControl>
-                <FormInput placeholder="shadcn" {...field} />
+                <FormInput placeholder="date" {...field} />
               </FormControl>
               <FormDescription>
-                This is your public display name.
+                This is your date of match. (example: 24.04.2004)
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>description</FormLabel>
+              <FormControl>
+                <FormInput placeholder="description" {...field} />
+              </FormControl>
+              <FormDescription>example: матч проходил в москве</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="commands"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>commands</FormLabel>
+              <FormControl>
+                <FormInput placeholder="commands" {...field} />
+              </FormControl>
+              <FormDescription>example: газмяс ростов</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="result"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>result</FormLabel>
+              <FormControl>
+                <FormInput placeholder="result" {...field} />
+              </FormControl>
+              <FormDescription>example: газмяс win</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="attendance"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>attendance</FormLabel>
+              <FormControl>
+                <FormInput placeholder="attendance" {...field} />
+              </FormControl>
+              <FormDescription>
+                Заполненность концерта в процентах. (example: 50)
               </FormDescription>
               <FormMessage />
             </FormItem>
