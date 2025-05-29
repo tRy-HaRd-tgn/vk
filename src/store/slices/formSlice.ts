@@ -1,13 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface FormState {
+type FormState = {
   date?: string;
   description?: string;
   result?: string;
   commands?: string;
   attendance?: number | undefined;
-}
+};
 
 const initialState: FormState = {
   date: "",
@@ -17,8 +16,8 @@ const initialState: FormState = {
   attendance: 0,
 };
 
-export const formSlice = createSlice({
-  name: "forming",
+const formSlice = createSlice({
+  name: "form",
   initialState,
   reducers: {
     updateFormInfo: (state, action: PayloadAction<FormState>) => {
@@ -46,12 +45,5 @@ export const formSlice = createSlice({
   },
 });
 
-export const {
-  updateFormInfo,
-  updateDate,
-  updateDescription,
-  updateResult,
-  updateCommands,
-  updateAttendance,
-} = formSlice.actions;
+export const { actions: formActions } = formSlice;
 export default formSlice.reducer;

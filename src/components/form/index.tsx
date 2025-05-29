@@ -52,7 +52,7 @@ const formSchema = z.object({
 });
 
 export const CustomForm = () => {
-  const obj = useSelector((state: any) => state.formSlice);
+  const obj = useSelector((state: any) => state.form);
   const [success, setSuccess] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   function parseStringToArray(str: string) {
