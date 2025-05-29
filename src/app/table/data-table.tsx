@@ -31,15 +31,32 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
+import axios from "axios";
+import { useState } from "react";
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
 }: DataTableProps<TData, TValue>) {
+  const PAGE_SIZE: number = 10;
+  const [pageParam, setPageParam] = useState(1);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [data, setData] = useState<TData[]>([]);
+  const fetchItems = async (pageParam: number) => {
+    const response = await axios.get(
+      `http://localhost:3000/matches?_start=${
+        (pageParam - 1) * PAGE_SIZE
+      }&_end=${pageParam * PAGE_SIZE}`
+    );
+    console.log("Page:", pageParam, "Data:", response.data);
+    setData(response.data);
+    return response.data;
+  };
+  React.useEffect(() => {
+    fetchItems(pageParam);
+  }, [pageParam]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const table = useReactTable({
@@ -151,16 +168,16 @@ export function DataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
+          onClick={() => setPageParam((prev) => Math.max(0, prev - 1))}
+          disabled={pageParam === 1}
         >
           Previous
         </Button>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
+          onClick={() => setPageParam(pageParam + 1)}
+          disabled={data.length < PAGE_SIZE}
         >
           Next
         </Button>

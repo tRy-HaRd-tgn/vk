@@ -38,7 +38,7 @@ FormButton.displayName = "FormButton";
 
 const formSchema = z.object({
   id: z.string(),
-  date: z.string().length(11),
+  date: z.string().length(10),
   description: z.string().min(5).max(300),
   result: z.string().min(5).max(30),
   commands: z
