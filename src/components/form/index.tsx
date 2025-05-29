@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { forwardRef } from "react";
+import styles from "./styles.module.scss";
 import {
   Form,
   FormControl,
@@ -15,6 +16,7 @@ import {
 import MatchService from "@/service/matchService";
 import { Input } from "@/components/ui/input";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 const FormInput = forwardRef<
   HTMLInputElement,
@@ -43,14 +45,15 @@ const formSchema = z.object({
     .string()
     .min(5)
     .max(30)
-    .refine(
-      (value) => (value.match(/\s/g) || []).length === 1, // Проверка на ровно 1 пробел
-      { message: "Строка должна содержать ровно один пробел" }
-    ),
+    .refine((value) => (value.match(/\s/g) || []).length === 1, {
+      message: "Строка должна содержать ровно один пробел",
+    }),
   attendance: z.number().min(0).max(100),
 });
+
 export const CustomForm = () => {
   const obj = useSelector((state: any) => state.formSlice);
+  const [success, setSuccess] = useState<boolean>(false);
   function parseStringToArray(str: string) {
     return str.trim().split(/\s+/);
   }
@@ -69,7 +72,11 @@ export const CustomForm = () => {
 
   const { isSubmitting, errors } = form.formState;
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(
+    e: React.FormEvent,
+    values: z.infer<typeof formSchema>
+  ) {
+    e.preventDefault();
     try {
       var uniq = "id" + new Date().getTime();
       values.id = uniq;
@@ -83,14 +90,21 @@ export const CustomForm = () => {
         values.attendance
       );
       console.log(response);
+      setSuccess(true);
+      setTimeout(() => {}, 4000);
     } catch (e) {
       console.log(e);
-    } finally {
     }
   }
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit((values) => {
+          onSubmit(new Event("submit") as any, values);
+        })}
+        className="space-y-8"
+      >
         <FormField
           control={form.control}
           name="date"
@@ -170,9 +184,17 @@ export const CustomForm = () => {
             </FormItem>
           )}
         />
-        <FormButton type="submit" disabled={isSubmitting}>
+        <Button
+          type="button"
+          disabled={isSubmitting}
+          onClick={(e) => form.handleSubmit((values) => onSubmit(e, values))()}
+        >
           {isSubmitting ? "Отправка..." : "Отправить"}
-        </FormButton>
+        </Button>
+        {errors.root && <p className={styles.error}>{errors.root?.message}</p>}
+        {success && (
+          <p className={styles.success}>Добавление произошло успешно</p>
+        )}
       </form>
     </Form>
   );
