@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { forwardRef } from "react";
 import styles from "./styles.module.scss";
 import {
-  Form,
+  Form as ShadcnForm,
   FormControl,
   FormDescription,
   FormField,
@@ -54,6 +54,7 @@ const formSchema = z.object({
 export const CustomForm = () => {
   const obj = useSelector((state: any) => state.formSlice);
   const [success, setSuccess] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   function parseStringToArray(str: string) {
     return str.trim().split(/\s+/);
   }
@@ -70,43 +71,43 @@ export const CustomForm = () => {
     },
   });
 
-  const { isSubmitting, errors } = form.formState;
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = form;
 
-  async function onSubmit(
-    e: React.FormEvent,
-    values: z.infer<typeof formSchema>
-  ) {
-    e.preventDefault();
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setSuccess(false);
+    setIsSubmitting(true);
     try {
       var uniq = "id" + new Date().getTime();
       values.id = uniq;
       console.log(values);
-      const response = await MatchService.addMatch(
-        values.id,
-        values.date,
-        values.description,
-        values.result,
-        parseStringToArray(values.commands),
-        values.attendance
-      );
-      console.log(response);
-      setSuccess(true);
-      setTimeout(() => {}, 4000);
+      setTimeout(async () => {
+        const response = await MatchService.addMatch(
+          values.id,
+          values.date,
+          values.description,
+          values.result,
+          parseStringToArray(values.commands),
+          values.attendance
+        );
+        setSuccess(true);
+        console.log(response);
+      }, 1500);
     } catch (e) {
       console.log(e);
+      setSuccess(false);
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit((values) => {
-          onSubmit(new Event("submit") as any, values);
-        })}
-        className="space-y-8"
-      >
+    <ShadcnForm {...form}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <FormField
-          control={form.control}
+          control={control}
           name="date"
           render={({ field }) => (
             <FormItem>
@@ -122,7 +123,7 @@ export const CustomForm = () => {
           )}
         />
         <FormField
-          control={form.control}
+          control={control}
           name="description"
           render={({ field }) => (
             <FormItem>
@@ -136,7 +137,7 @@ export const CustomForm = () => {
           )}
         />
         <FormField
-          control={form.control}
+          control={control}
           name="commands"
           render={({ field }) => (
             <FormItem>
@@ -150,7 +151,7 @@ export const CustomForm = () => {
           )}
         />
         <FormField
-          control={form.control}
+          control={control}
           name="result"
           render={({ field }) => (
             <FormItem>
@@ -164,7 +165,7 @@ export const CustomForm = () => {
           )}
         />
         <FormField
-          control={form.control}
+          control={control}
           name="attendance"
           render={({ field }) => (
             <FormItem>
@@ -184,11 +185,7 @@ export const CustomForm = () => {
             </FormItem>
           )}
         />
-        <Button
-          type="button"
-          disabled={isSubmitting}
-          onClick={(e) => form.handleSubmit((values) => onSubmit(e, values))()}
-        >
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Отправка..." : "Отправить"}
         </Button>
         {errors.root && <p className={styles.error}>{errors.root?.message}</p>}
@@ -196,6 +193,6 @@ export const CustomForm = () => {
           <p className={styles.success}>Добавление произошло успешно</p>
         )}
       </form>
-    </Form>
+    </ShadcnForm>
   );
 };
