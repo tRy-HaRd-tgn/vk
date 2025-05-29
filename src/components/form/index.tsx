@@ -1,4 +1,3 @@
-import styles from "./styles.module.scss";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -14,6 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const FormInput = forwardRef<
   HTMLInputElement,
@@ -41,25 +42,30 @@ const formSchema = z.object({
   attendance: z.number().min(0).max(100),
 });
 export const CustomForm = () => {
+  const dispatch = useDispatch();
+  const obj = useSelector((state: any) => state.formSlice);
+  console.log(obj);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      date: "",
-      description: "",
-      result: "",
-      commands: "",
+      date: obj.date,
+      description: obj.description,
+      result: obj.result,
+      commands: obj.commands,
+      attendance: obj.attendance,
     },
   });
 
   const { isSubmitting, errors } = form.formState;
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    //var uniq = 'id' + (new Date()).getTime(); - формирование id
     try {
+      console.log(values);
+      var uniq = "id" + new Date().getTime();
+      console.log(uniq);
     } catch (e) {
     } finally {
     }
-    console.log(values);
   }
   return (
     <Form {...form}>
@@ -129,7 +135,12 @@ export const CustomForm = () => {
             <FormItem>
               <FormLabel>attendance</FormLabel>
               <FormControl>
-                <FormInput placeholder="attendance" {...field} />
+                <FormInput
+                  type="number"
+                  placeholder="attendance"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
               </FormControl>
               <FormDescription>
                 Заполненность концерта в процентах. (example: 50)

@@ -46,7 +46,6 @@ export const columns: ColumnDef<MatchesProps>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      console.log(row.original);
       const info = row.original;
 
       return (
