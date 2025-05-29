@@ -12,8 +12,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import MatchService from "@/service/matchService";
 import { Input } from "@/components/ui/input";
-import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
 const FormInput = forwardRef<
@@ -35,35 +35,56 @@ const FormButton = forwardRef<
 FormButton.displayName = "FormButton";
 
 const formSchema = z.object({
+  id: z.string(),
   date: z.string().length(11),
   description: z.string().min(5).max(300),
   result: z.string().min(5).max(30),
-  commands: z.string().min(5).max(30),
+  commands: z
+    .string()
+    .min(5)
+    .max(30)
+    .refine(
+      (value) => (value.match(/\s/g) || []).length === 1, // Проверка на ровно 1 пробел
+      { message: "Строка должна содержать ровно один пробел" }
+    ),
   attendance: z.number().min(0).max(100),
 });
 export const CustomForm = () => {
-  const dispatch = useDispatch();
   const obj = useSelector((state: any) => state.formSlice);
-  console.log(obj);
+  function parseStringToArray(str: string) {
+    return str.trim().split(/\s+/);
+  }
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      date: obj.date,
-      description: obj.description,
-      result: obj.result,
-      commands: obj.commands,
-      attendance: obj.attendance,
+      id: "",
+      date: obj.date || "",
+      description: obj.description || "",
+      result: obj.result || "",
+      commands: obj.commands || "",
+      attendance: obj.attendance || 0,
     },
   });
 
   const { isSubmitting, errors } = form.formState;
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values);
       var uniq = "id" + new Date().getTime();
-      console.log(uniq);
+      values.id = uniq;
+      console.log(values);
+      const response = await MatchService.addMatch(
+        values.id,
+        values.date,
+        values.description,
+        values.result,
+        parseStringToArray(values.commands),
+        values.attendance
+      );
+      console.log(response);
     } catch (e) {
+      console.log(e);
     } finally {
     }
   }
@@ -93,7 +114,7 @@ export const CustomForm = () => {
             <FormItem>
               <FormLabel>description</FormLabel>
               <FormControl>
-                <FormInput placeholder="description" {...field} />
+                <FormInput {...field} placeholder="description" />
               </FormControl>
               <FormDescription>example: матч проходил в москве</FormDescription>
               <FormMessage />

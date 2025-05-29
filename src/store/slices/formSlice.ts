@@ -2,11 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface FormState {
-  date: string;
-  description: string;
-  result: string;
-  commands: string;
-  attendance: number | undefined;
+  date?: string;
+  description?: string;
+  result?: string;
+  commands?: string;
+  attendance?: number | undefined;
 }
 
 const initialState: FormState = {
@@ -14,7 +14,7 @@ const initialState: FormState = {
   description: "",
   result: "",
   commands: "",
-  attendance: undefined,
+  attendance: 0,
 };
 
 export const formSlice = createSlice({
@@ -28,23 +28,30 @@ export const formSlice = createSlice({
       state.commands = action.payload.commands;
       state.attendance = action.payload.attendance;
     },
-    updateDate: (state, action: PayloadAction<FormState>) => {
-      state.date = action.payload.date;
+    updateDate: (state, action: PayloadAction<string>) => {
+      state.date = action.payload;
     },
-    updateDescription: (state, action: PayloadAction<FormState>) => {
-      state.description = action.payload.description;
+    updateDescription: (state, action: PayloadAction<string>) => {
+      state.description = action.payload;
     },
-    updateResult: (state, action: PayloadAction<FormState>) => {
-      state.result = action.payload.result;
+    updateResult: (state, action: PayloadAction<string>) => {
+      state.result = action.payload;
     },
-    updateCommands: (state, action: PayloadAction<FormState>) => {
-      state.commands = action.payload.commands;
+    updateCommands: (state, action: PayloadAction<string>) => {
+      state.commands = action.payload;
     },
-    updateAttendance: (state, action: PayloadAction<FormState>) => {
-      state.attendance = action.payload.attendance;
+    updateAttendance: (state, action: PayloadAction<number>) => {
+      state.attendance = action.payload;
     },
   },
 });
 
-export const { updateFormInfo } = formSlice.actions;
+export const {
+  updateFormInfo,
+  updateDate,
+  updateDescription,
+  updateResult,
+  updateCommands,
+  updateAttendance,
+} = formSlice.actions;
 export default formSlice.reducer;
